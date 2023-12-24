@@ -28,6 +28,8 @@ export let radius = () => {
 export let somHeight = 10;
 export let somWidth = 10;
 export let space = 50;
+export let xOffset = 0;
+export let yOffset = 0;
 export let width;
 
 let edges;
@@ -38,10 +40,10 @@ let worker;
 
 const x = scaleLinear()
 	.domain([0, (somWidth + 2) * space])
-	.range([0, width]);
+	.range([xOffset, width + xOffset]);
 const y = scaleLinear()
 	.domain([0, (somHeight + 2) * space])
-	.range([0, height]);
+	.range([yOffset, height + yOffset]);
 
 const payload = {
 	data,
