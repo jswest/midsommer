@@ -10,7 +10,6 @@
 	},
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
 		}
 	},
@@ -35,5 +34,8 @@
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"d3": "^7.8.5"
+	}
 }
