@@ -21,6 +21,7 @@ export let width;
 let edges;
 let iteration;
 let nodes;
+let ready = false;
 
 const x = scaleLinear()
 	.domain([0, (somWidth + 2) * space])
@@ -51,7 +52,7 @@ export function iterate() {
 }
 
 onMount(() => {
-	worker = new Worker(new URL("./../workers/som.js", import.meta.url), {
+	worker = new Worker(new URL("./../workers/worker.js", import.meta.url), {
 		type: "module",
 	});
 	worker.addEventListener("message", (event) => {
