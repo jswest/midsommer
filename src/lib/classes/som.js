@@ -70,7 +70,7 @@ export class SOM {
     for (let x = 0; x < this.#size.width; x++) {
       this.#map[x] = new Array(this.#size.height);
       for (let y = 0; y < this.#size.height; y++) {
-        this.#map[x][y] = Float64Array(random.vector(this.#dimensions));
+        this.#map[x][y] = new Float64Array(random.vector(this.#dimensions));
       }
     }
   }

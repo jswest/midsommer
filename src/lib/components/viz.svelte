@@ -68,7 +68,7 @@ onMount(() => {
 {#if ready}
 	<g class="som-viz">
 		<g class="som-viz-bg-cloud">
-			{#each $nodes as node}
+			{#each nodes as node}
 				<circle
 					cx={x(node.x)}
 					cy={y(node.y)}
@@ -78,7 +78,7 @@ onMount(() => {
 			{/each}
 		</g>
 		<g class="som-viz-fg-cloud">
-			{#each $nodes as node}
+			{#each nodes as node}
 				<circle
 					cx={x(node.x)}
 					cy={y(node.y)}
@@ -88,7 +88,7 @@ onMount(() => {
 			{/each}
 		</g>
 		<g class="som-viz-edges">
-			{#each $edges as edge}
+			{#each edges as edge}
 				<line
 					stroke="white"
 					stroke-width={0.1}
@@ -100,7 +100,7 @@ onMount(() => {
 			{/each}
 		</g>
 		<g class="som-viz-nodes">
-			{#each $nodes as node}
+			{#each nodes as node}
 				<circle
 					cx={x(node.x)}
 					cy={y(node.y)}
