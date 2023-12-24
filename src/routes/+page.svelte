@@ -1,7 +1,104 @@
 <script>
+	import { max, scaleLinear } from 'd3';
 	import { Viz } from '$lib/index.js';
+
+	const data = [];
+	for (let i = 0; i < 100; i++) {
+		data.push({
+			vector: Array.from({length: 100}, () => Math.random()),
+		})
+	}
+	
+	let bgs = [];
+	let edges = [];
+	let fgs = [];
+	let iteration = 0;
+	let nodes = [];
+	const callback = (report) => {
+		edges = report.edges;
+		iteration = report.iteration;
+		nodes = report.nodes;
+
+		const bgScale = scaleLinear()
+			.domain([0, max(nodes.map((n) => n.data.length))])
+			.range(["transparent", "rgba(255,0,0,0.75)"]);
+		const fgScale = scaleLinear()
+			.domain([0, max(nodes.map((n) => n.data.length))])
+			.range(["transparent", "rgba(0,0,255,0.5)"]);
+		bgs = nodes.map((n) => {
+			return {
+				id: `node-bg-${n.id}`,
+				end: "transparent",
+				start: bgScale(n.data.length),
+			};
+		});
+		fgs = nodes.map((n) => {
+			return {
+				id: `node-fg-${n.id}`,
+				end: "transparent",
+				start: fgScale(n.data.length)
+			}
+		});
+	};
+	const height = 500;
+	const iterations = 200;
+	const width = 500;
+
+	let viz;
+
+	const background = (node) => {
+		return `url(#node-bg-${node.id})`;
+	};
+	const fill = (node) => {
+		return `url(#node)`;
+	}
+	const foreground = (node) => {
+		return `url(#node-fg-${node.id})`;
+	}
 </script>
 
-<svg>
-	<Viz />
-</svg>
+<div>
+	<div><p>iteration {iteration}</p></div>
+	<button on:click={() => { viz.run() }}>Run</button>
+	<button on:click={() => { viz.iterate() }}>iterate</button>
+	<svg height={height} width={width}>
+		<g class="defs">
+			<defs>
+				<radialGradient id="node">
+					<stop offset="0%" stop-color="white" />
+					<stop offset="50%" stop-color="white" />
+					<stop offset="100%" stop-color="transparent" />
+				</radialGradient>
+				{#each bgs as bg}
+					<radialGradient id="{bg.id}">
+						<stop offset="0%" stop-color="{bg.start}" />
+						<stop offset="100%" stop-color="{bg.end}" />
+					</radialGradient>
+				{/each}
+				{#each fgs as fg}
+					<radialGradient id="{fg.id}">
+						<stop offset="0%" stop-color="{fg.start}" />
+						<stop offset="100%" stop-color="{fg.end}" />
+					</radialGradient>
+				{/each}
+			</defs>
+		</g>
+		<Viz
+			bind:this={viz}
+			background={background}
+			callback={callback}
+			data={data}
+			fill={fill}
+			foreground={foreground}
+			height={height}
+			iterations={iterations}
+			width={width}
+		/>
+	</svg>
+</div>
+
+<style>
+	svg {
+		background-color: black;
+	}
+</style>

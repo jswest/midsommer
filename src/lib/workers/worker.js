@@ -117,6 +117,7 @@ const iterate = () => {
 			width: spaceWidth,
 		},
 	});
+	return true;
 };
 
 self.addEventListener("message", (event) => {

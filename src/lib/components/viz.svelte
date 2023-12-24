@@ -3,16 +3,28 @@ import { scaleLinear } from "d3";
 import { onMount } from "svelte";
 
 import { SOM } from "$lib/classes/som.js";
-
-export let background = () => {};
-export let click = (node) => { console.log(node); };
+export let background = () => {
+	return "transparent";
+};
+export let callback;
+export let click = (node) => {
+	console.log(node);
+};
 export let cloudRadius = 60;
 export let data;
-export let fill = () => { return 'white'; };
-export let foreground = () => {};
+export let fill = () => {
+	return "black";
+};
+export let foreground = () => {
+	return "transparent";
+};
 export let height;
-export let name;
-export let radius = () => { return 2; };
+export let iterations;
+export let line = "white";
+export let name = '';
+export let radius = () => {
+	return 2;
+};
 export let somHeight = 10;
 export let somWidth = 10;
 export let space = 50;
@@ -34,6 +46,7 @@ const y = scaleLinear()
 const payload = {
 	data,
 	height: somHeight,
+	iterations,
 	space,
 	width: somWidth,
 };
@@ -58,9 +71,14 @@ onMount(() => {
 	});
 	worker.addEventListener("message", (event) => {
 		ready = true;
+		edges = event.data.payload.edges;
 		iteration = event.data.payload.iteration;
 		nodes = event.data.payload.nodes;
-		edges = event.data.payload.edges;
+		callback({
+			edges: edges,
+			iteration: iteration,
+			nodes: nodes,
+		})
 	});
 });
 </script>
@@ -90,7 +108,7 @@ onMount(() => {
 		<g class="som-viz-edges">
 			{#each edges as edge}
 				<line
-					stroke="white"
+					stroke={line}
 					stroke-width={0.1}
 					x1={x(edge.source.x)}
 					x2={x(edge.target.x)}
