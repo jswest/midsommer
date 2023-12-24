@@ -22,6 +22,7 @@ let edges;
 let iteration;
 let nodes;
 let ready = false;
+let worker;
 
 const x = scaleLinear()
 	.domain([0, (somWidth + 2) * space])

@@ -1,7 +1,7 @@
 import { color, extent, forceLink, forceSimulation, scaleLinear } from "d3";
 
 import { SOM } from "$lib/classes/som.js";
-import { cosine } from "$lib/util.js";
+import { cosine } from "$lib/utils.js";
 
 const cosineScale = scaleLinear()
 	.domain([-1, 1])
