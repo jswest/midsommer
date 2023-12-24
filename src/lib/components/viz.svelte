@@ -23,10 +23,10 @@ let iteration;
 let nodes;
 
 const x = scaleLinear()
-	.domain([0, (somWidth + 2) * SPACE])
+	.domain([0, (somWidth + 2) * space])
 	.range([0, width]);
 const y = scaleLinear()
-	.domain([0, (somHeight + 2) * SPACE])
+	.domain([0, (somHeight + 2) * space])
 	.range([0, height]);
 
 const payload = {
