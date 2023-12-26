@@ -17,7 +17,6 @@ export class SOM {
   };
 
   constructor({
-    decay,
     dimensions,
     height,
     iterations,

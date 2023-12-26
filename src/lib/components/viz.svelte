@@ -19,14 +19,12 @@ export let foreground = () => {
 	return "transparent";
 };
 export let height;
-export let iterations;
 export let line = "white";
-export let name = '';
+export let name = "";
 export let radius = () => {
 	return 2;
 };
-export let somHeight = 10;
-export let somWidth = 10;
+export let somConfig = {};
 export let space = 50;
 export let xOffset = 0;
 export let yOffset = 0;
@@ -39,18 +37,16 @@ let ready = false;
 let worker;
 
 const x = scaleLinear()
-	.domain([0, (somWidth + 2) * space])
+	.domain([0, (somConfig.width + 2) * space])
 	.range([xOffset, width + xOffset]);
 const y = scaleLinear()
-	.domain([0, (somHeight + 2) * space])
+	.domain([0, (somConfig.height + 2) * space])
 	.range([yOffset, height + yOffset]);
 
 const payload = {
 	data,
-	height: somHeight,
-	iterations,
+	somConfig,
 	space,
-	width: somWidth,
 };
 
 export function run() {
@@ -80,7 +76,7 @@ onMount(() => {
 			edges: edges,
 			iteration: iteration,
 			nodes: nodes,
-		})
+		});
 	});
 });
 </script>

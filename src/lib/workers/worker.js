@@ -126,20 +126,15 @@ self.addEventListener("message", (event) => {
 		if (!som) {
 			data = payload.data;
 			forceSpaceStrength = payload.forceSpaceStrength || 0.2;
-			iterations = payload.iterations || 200;
-			height = payload.height;
-			width = payload.width;
+			iterations = payload.somConfig.iterations;
+			height = payload.somConfig.height;
+			width = payload.somConfig.width;
 			space = payload.space;
 
 			spaceHeight = (height + 2) * space;
 			spaceWidth = (width + 2) * space;
 
-			som = new SOM({
-				dimensions: data[0].vector.length,
-				height,
-				iterations,
-				width,
-			});
+			som = new SOM(payload.somConfig);
 
 			for (let x = 0; x < som.map.length; x++) {
 				for (let y = 0; y < som.map[x].length; y++) {
@@ -162,8 +157,9 @@ self.addEventListener("message", (event) => {
 		}
 
 		if (event.data.name === "SOM_RUN") {
-			for (i = 0; i < iterations; i++) {
+			for (let j = i; j < iterations; j++) {
 				const go = iterate();
+				i++;
 				if (!go) {
 					break;
 				}
