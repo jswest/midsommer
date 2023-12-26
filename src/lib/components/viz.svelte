@@ -1,6 +1,7 @@
 <script>
 import { scaleLinear } from "d3";
 import { onMount } from "svelte";
+import workerUrl from "$lib/workers/worker.js?worker&url";
 
 import { SOM } from "$lib/classes/som.js";
 export let background = () => {
@@ -64,9 +65,7 @@ export function iterate() {
 }
 
 onMount(() => {
-	worker = new Worker(new URL("./../workers/worker.js", import.meta.url), {
-		type: "module",
-	});
+	worker = new Worker(workerUrl, { type: "module" });
 	worker.addEventListener("message", (event) => {
 		ready = true;
 		edges = event.data.payload.edges;
