@@ -16,12 +16,12 @@ const iterations = 200;
 const width = 500;
 
 const forceConfig = {
-	centerStrength: 0,
+	centerStrength: 1,
 	filterEmpties: true,
 	hideEmpties: false,
 	iterations: 10,
-	manyBodyStrength: 0,
-	spaceStrength: 0.1,
+	manyBodyStrength: -30,
+	spaceStrength: 0,
 }
 
 const somConfig = {

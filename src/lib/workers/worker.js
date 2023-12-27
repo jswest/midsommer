@@ -112,9 +112,10 @@ const iterate = () => {
 		)
 		.force(
 			"center",
-			forceCenter(forceConfig.center[0], forceConfig.center[1]).strength(
-				forceConfig.centerStrength,
-			),
+			forceCenter(
+				space * (width / 2),
+				space * (height / 2),
+			).strength(forceConfig.centerStrength),
 		)
 		.force("charge", forceManyBody().strength(forceConfig.manyBodyStrength))
 		.force("space", () => {
