@@ -5,7 +5,7 @@ import { Random, Viz } from "$lib/index.js";
 const rando = new Random(42);
 
 const data = [];
-for (let i = 0; i < 5000; i++) {
+for (let i = 0; i < 1000; i++) {
 	data.push({
 		vector: rando.vector(3).map((d) => d * 255),
 	});
@@ -14,6 +14,14 @@ for (let i = 0; i < 5000; i++) {
 const height = 500;
 const iterations = 200;
 const width = 500;
+
+const forceConfig = {
+	filterEmpties: true,
+	hideEmpties: false,
+	iterations: 10,
+	manyBodyStrength: 0,
+	spaceStrength: 0.1,
+}
 
 const somConfig = {
 	dimensions: data[0].vector.length,
@@ -106,6 +114,7 @@ const foreground = (node) => {
 			callback={callback}
 			data={data}
 			fill={fill}
+			forceConfig={forceConfig}
 			foreground={foreground}
 			height={height}
 			somConfig={somConfig}

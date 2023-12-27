@@ -16,6 +16,7 @@ export let data;
 export let fill = () => {
 	return "black";
 };
+export let forceConfig = {};
 export let foreground = () => {
 	return "transparent";
 };
@@ -47,6 +48,7 @@ const y = scaleLinear()
 
 const payload = {
 	data,
+	forceConfig,
 	somConfig,
 	space,
 };
@@ -69,9 +71,15 @@ onMount(() => {
 	worker = new Worker(workerUrl, { type: "module" });
 	worker.addEventListener("message", (event) => {
 		ready = true;
-		edges = event.data.payload.edges;
+		edges = event.data.payload.edges.filter((e) =>
+			forceConfig?.hideEmpties
+				? e.source.data.length > 0 && e.target.data.length > 0
+				: true,
+		);
 		iteration = event.data.payload.iteration;
-		nodes = event.data.payload.nodes;
+		nodes = event.data.payload.nodes.filter((n) =>
+			forceConfig?.hideEmpties ? n.data.length > 0 : true,
+		);
 		state = event.data.payload.state;
 		callback({
 			edges,
