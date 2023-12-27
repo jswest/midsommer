@@ -114,6 +114,7 @@ const iterate = () => {
 			nodes,
 			edges,
 			height: spaceHeight,
+			state: som.state,
 			width: spaceWidth,
 		},
 	});

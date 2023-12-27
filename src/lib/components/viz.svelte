@@ -35,6 +35,7 @@ let edges;
 let iteration;
 let nodes;
 let ready = false;
+let state;
 let worker;
 
 const x = scaleLinear()
@@ -71,10 +72,12 @@ onMount(() => {
 		edges = event.data.payload.edges;
 		iteration = event.data.payload.iteration;
 		nodes = event.data.payload.nodes;
+		state = event.data.payload.state;
 		callback({
-			edges: edges,
-			iteration: iteration,
-			nodes: nodes,
+			edges,
+			iteration,
+			nodes,
+			state,
 		});
 	});
 });

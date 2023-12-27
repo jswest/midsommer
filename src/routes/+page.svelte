@@ -5,9 +5,9 @@ import { Random, Viz } from "$lib/index.js";
 const rando = new Random(42);
 
 const data = [];
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 5000; i++) {
 	data.push({
-		vector: rando.vector(50),
+		vector: rando.vector(3).map((d) => d * 255),
 	});
 }
 
@@ -33,10 +33,13 @@ let edges = [];
 let fgs = [];
 let iteration = 0;
 let nodes = [];
+let state = null;
+
 const callback = (report) => {
 	edges = report.edges;
 	iteration = report.iteration;
 	nodes = report.nodes;
+	state = report.state;
 
 	const bgScale = scaleLinear()
 		.domain([0, max(nodes.map((n) => n.data.length))])
@@ -48,14 +51,14 @@ const callback = (report) => {
 		return {
 			id: `node-bg-${n.id}`,
 			end: "transparent",
-			start: bgScale(n.data.length),
+			start: `rgba(${n.neuron[0]},${n.neuron[1]},${n.neuron[2]},0.5)`,
 		};
 	});
 	fgs = nodes.map((n) => {
 		return {
 			id: `node-fg-${n.id}`,
 			end: "transparent",
-			start: fgScale(n.data.length),
+			start: "transparent"
 		};
 	});
 };

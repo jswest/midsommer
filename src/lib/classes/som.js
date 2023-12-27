@@ -78,6 +78,14 @@ export class SOM {
     return this.#map;
   }
 
+  get state() {
+    return {
+      iteration: this.#iteration,
+      learningRate: this.#learningRate,
+      radius: this.#radius,
+    };
+  }
+
   #decay(iteration) {
     this.#learningRate =
       this.#initialLearningRate * (1 - iteration / this.#iterations);
