@@ -16,6 +16,7 @@ const iterations = 200;
 const width = 500;
 
 const forceConfig = {
+	centerStrength: 0,
 	filterEmpties: true,
 	hideEmpties: false,
 	iterations: 10,

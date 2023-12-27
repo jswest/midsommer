@@ -1,6 +1,7 @@
 import {
 	color,
 	extent,
+	forceCenter,
 	forceLink,
 	forceManyBody,
 	forceSimulation,
@@ -109,6 +110,7 @@ const iterate = () => {
 				.strength((d) => reweight(d.weight))
 				.iterations(forceConfig.iterations),
 		)
+		.force("center", forceCenter().strength(forceConfig.centerStrength))
 		.force("charge", forceManyBody().strength(forceConfig.manyBodyStrength))
 		.force("space", () => {
 			for (const node of nodes) {
