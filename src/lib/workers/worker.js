@@ -140,10 +140,22 @@ const iterate = () => {
 	self.postMessage({
 		type: "SOM_OUT",
 		payload: {
-			iteration: i + 1,
-			nodes,
-			edges,
+			edges: edges.filter((e) => {
+					if (forceConfig.filterEmpties) {
+						if (e.source?.data && e.target?.data) {
+							return e.source.data.length > 0 && e.target.data.length > 0;
+						} else {
+							return (
+								nodes.find((n) => n.id === e.source)?.data.length &&
+								nodes.find((n) => n.id === e.target)?.data.length
+							);
+						}
+					}
+					return true;
+				}),
 			height: spaceHeight,
+			iteration: i + 1,
+			nodes: nodes.filter((n) => (forceConfig.filterEmpties ? n.data.length > 0 : true)),
 			state: som.state,
 			width: spaceWidth,
 		},
