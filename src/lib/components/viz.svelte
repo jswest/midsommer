@@ -48,7 +48,9 @@ const y = scaleLinear()
 
 const payload = {
 	data,
-	forceConfig,
+	forceConfig: Object.assign(forceConfig, {
+		center: [xOffset + width / 2, yOffset + height / 2],
+	}),
 	somConfig,
 	space,
 };

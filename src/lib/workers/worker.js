@@ -110,7 +110,12 @@ const iterate = () => {
 				.strength((d) => reweight(d.weight))
 				.iterations(forceConfig.iterations),
 		)
-		.force("center", forceCenter().strength(forceConfig.centerStrength))
+		.force(
+			"center",
+			forceCenter(forceConfig.center[0], forceConfig.center[1]).strength(
+				forceConfig.centerStrength,
+			),
+		)
 		.force("charge", forceManyBody().strength(forceConfig.manyBodyStrength))
 		.force("space", () => {
 			for (const node of nodes) {
@@ -143,21 +148,23 @@ const iterate = () => {
 		type: "SOM_OUT",
 		payload: {
 			edges: edges.filter((e) => {
-					if (forceConfig.filterEmpties) {
-						if (e.source?.data && e.target?.data) {
-							return e.source.data.length > 0 && e.target.data.length > 0;
-						} else {
-							return (
-								nodes.find((n) => n.id === e.source)?.data.length &&
-								nodes.find((n) => n.id === e.target)?.data.length
-							);
-						}
+				if (forceConfig.filterEmpties) {
+					if (e.source?.data && e.target?.data) {
+						return e.source.data.length > 0 && e.target.data.length > 0;
+					} else {
+						return (
+							nodes.find((n) => n.id === e.source)?.data.length &&
+							nodes.find((n) => n.id === e.target)?.data.length
+						);
 					}
-					return true;
-				}),
+				}
+				return true;
+			}),
 			height: spaceHeight,
 			iteration: i + 1,
-			nodes: nodes.filter((n) => (forceConfig.filterEmpties ? n.data.length > 0 : true)),
+			nodes: nodes.filter((n) =>
+				forceConfig.filterEmpties ? n.data.length > 0 : true,
+			),
 			state: som.state,
 			width: spaceWidth,
 		},
