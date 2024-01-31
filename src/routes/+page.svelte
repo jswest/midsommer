@@ -28,20 +28,22 @@ for (const vote of csvParse(rawVotes)) {
 			extant.votes.push({
 				cast_code: +vote.cast_code,
 				rollnumber: +vote.rollnumber,
-			})
+			});
 		} else {
 			const senator = members.find((m) => +m.icpsr === +vote.icpsr);
 			data.push({
 				bioname: senator.bioname,
 				icpsr: +vote.icpsr,
-				party: +senator.party_code === 200 ? 'r' : 'd',
-				votes: [{
-					cast_code: +vote.cast_code,
-					rollnumber: +vote.rollnumber,
-				}]
-			})
+				party: +senator.party_code === 200 ? "r" : "d",
+				votes: [
+					{
+						cast_code: +vote.cast_code,
+						rollnumber: +vote.rollnumber,
+					},
+				],
+			});
 		}
-		votes.push(+vote.rollnumber);		
+		votes.push(+vote.rollnumber);
 	}
 }
 votes = [...new Set(votes)].sort((a, b) => a - b);
@@ -60,7 +62,10 @@ for (const datum of data) {
 
 const bgScale = scaleLinear()
 	.domain([0, 1])
-	.range(["rgba(255,100,100,0.5)", "rgba(100,100,255,0.5)"]);
+	.range(["rgba(255,100,100,0.2)", "rgba(100,100,255,0.2)"]);
+const fgScale = scaleLinear()
+	.domain([0, 1])
+	.range(["rgba(255,100,100,0.4)", "rgba(100,100,255,0.4)"]);
 const callback = (report) => {
 	edges = report.edges;
 	iteration = report.iteration;
@@ -70,11 +75,11 @@ const callback = (report) => {
 const forceConfig = {
 	centerStrength: 1,
 	filterEmpties: false,
-	hideEmpties: false,
-	iterations: 2,
-	manyBodyStrength: -300,
-	spaceStrength: 0.03,
-}
+	hideEmpties: true,
+	iterations: 5,
+	manyBodyStrength: -100,
+	spaceStrength: 0.005,
+};
 const somConfig = {
 	dimensions: data[0].vector.length,
 	height: 9,
@@ -96,6 +101,7 @@ let height = 468;
 let learningRate = 0;
 let iteration = 0;
 let nodes = [];
+let q = "";
 let radius = 0;
 let ready = false;
 let state = null;
@@ -114,12 +120,37 @@ $: bgs = nodes.map((n) => {
 		),
 	};
 });
-$: fill = (node) => {
-	if (node.data.length > 0) {
-		return `url(#node)`;
+$: fgs = nodes.map((n) => {
+	const out = {
+		id: `node-fg-${n.id}`,
+		end: "transparent",
+	};
+	if (
+		!q ||
+		n.data.filter((d) => d.bioname.toLowerCase().includes(q.toLowerCase()))
+	) {
+		out.start = fgScale(
+			n.data.filter((n) => n.party === "d").length / n.data.length,
+		);
 	} else {
-		return 'black'
+		out.start = "transparent";
 	}
+	return out;
+});
+$: fill = (node) => {
+	if (
+		node.data.length > 0 &&
+		(
+			!q ||
+			node.data.filter((d) => d.bioname.toLowerCase().includes(q.toLowerCase()))
+		)
+	) {
+		return `url(#node)`;
+	}
+	return "black";
+};
+$: foreground = (node) => {
+	return `url(#node-fg-${node.id})`;
 };
 $: radius = (node) => {
 	if (node.data.length === 0) {
@@ -129,14 +160,14 @@ $: radius = (node) => {
 	} else {
 		return 3.5;
 	}
-}
+};
 </script>
 
 <main>
 	<div id="controls">
 		<header>
 			<h2>Midsommer</h2>
-			<h1>How the Senate of the 117th congress voted.</h1>
+			<h1>Clustering senators in the 117th congress by their votes</h1>
 		</header>
 		<div class="control">
 			<button on:click={() => { viz.run() }}>run</button>
@@ -152,6 +183,10 @@ $: radius = (node) => {
 		</div>
 	</div>
 	<div id="inspector">
+		<div class="query">
+			<p class="helper">Search for a senator...</p>
+			<input type="text" bind:value={q} />
+		</div>
 		{#if active}
 			<ul>
 				{#each active.data as senator}
@@ -194,6 +229,7 @@ $: radius = (node) => {
 				data={data}
 				fill={fill}
 				forceConfig={forceConfig}
+				foreground={foreground}
 				height={height}
 				radius={radius}
 				somConfig={somConfig}
@@ -204,6 +240,14 @@ $: radius = (node) => {
 </main>
 
 <style>
+h1, h2, li, p {
+	color: white;
+	font-family: var(--font);
+	font-size: var(--unit);
+}
+.helper {
+	font-style: italic;
+}
 #controls {
 	border: 1px solid white;
 	box-sizing: border-box;

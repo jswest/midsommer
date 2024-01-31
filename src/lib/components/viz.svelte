@@ -39,10 +39,13 @@ let ready = false;
 let state;
 let worker;
 
-const x = scaleLinear()
+let x;
+let y;
+
+$: x = scaleLinear()
 	.domain([0, (somConfig.width + 2) * space])
 	.range([xOffset, width + xOffset]);
-const y = scaleLinear()
+$: y = scaleLinear()
 	.domain([0, (somConfig.height + 2) * space])
 	.range([yOffset, height + yOffset]);
 
