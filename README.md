@@ -8,7 +8,7 @@ _(An animated GIF of the first 10 iterations of a self-organizing map represengi
 
 ## What is a self-organizing map?
 
-A SOM is a neural network that can be used to reduce the dimensions of a n-length vector. It was inveted by Teuvo Kohonen in the '80s. For more, check out [Wikipedia](https://en.wikipedia.org/wiki/Self-organizing_map).
+A SOM is a neural network that can be used to reduce the dimensions of long vectors. It was inveted by Teuvo Kohonen in the '80s. For more, check out [Wikipedia](https://en.wikipedia.org/wiki/Self-organizing_map).
 
 ## How to use it.
 
