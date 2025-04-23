@@ -128,6 +128,7 @@ export class SOM {
     for (let i = 0; i < data.length; i++) {
       const bmu = this.#getBestMatch(new Float64Array(data[i]));
       if (!bmu) {
+        throw new Error("No best match found.");
         return false;
       }
       this.#update({
